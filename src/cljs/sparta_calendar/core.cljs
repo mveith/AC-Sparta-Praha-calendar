@@ -11,13 +11,19 @@
 
 (println "Ready...")
 
-(defonce app-state (atom {:text  "Client-side data"
-                          :match {
-                                  :team "A tým"
-                                  :event "Příprava"
-                                  :home-team "AC Sparta Praha"
-                                  :away-team "FK Ústí nad Labem"
-                                  :term "13. 1. 2016 | 11:00"}}))
+(defonce app-state (atom {:text    "Client-side data"
+                          :matches [{
+                                     :team      "A tým"
+                                     :event     "Příprava"
+                                     :home-team "AC Sparta Praha"
+                                     :away-team "FK Ústí nad Labem"
+                                     :term      "13. 1. 2016 | 11:00"}
+                                    {
+                                     :team      "A tým"
+                                     :event     "Test"
+                                     :home-team "AC Sparta Praha"
+                                     :away-team "bla bla"
+                                     :term      "14. 1. 2016 | 15:00"}]}))
 
 (defn get-server-side-data [{:keys [data on-complete]}]
   (let [xhr (XhrIo.)]
@@ -48,7 +54,6 @@
               (dom/td nil (get data :away-team))
               (dom/td nil (get data :term))))))
 
-
 (defn matches-component [data owner]
   (reify
     om/IRender
@@ -60,7 +65,9 @@
                                         (dom/th nil "Domácí")
                                         (dom/th nil "Hosté")
                                         (dom/th nil "Termín")))
-                 (om/build match-component (get data :match))))))
+                 (apply dom/tr nil
+                        (om/build-all match-component (get data :matches)
+                                      {:init-state state}))))))
 
 (defn root-component [data owner]
   (reify
