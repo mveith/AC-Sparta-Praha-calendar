@@ -11,7 +11,8 @@
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [org.omcljs/om "0.8.8"]
                  [ring "1.3.2"]
-                 [compojure "1.3.1"]]
+                 [compojure "1.3.1"]
+                 [enlive "1.1.6"]]
 
   :plugins [[lein-cljsbuild "1.0.5"]
             [lein-figwheel "0.2.9"]]

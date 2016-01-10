@@ -2,7 +2,8 @@
   (:require [ring.util.response :refer [file-response]]
             [ring.adapter.jetty :refer [run-jetty]]
             [compojure.core :refer [defroutes GET PUT]]
-            [compojure.route :as route]))
+            [compojure.route :as route]
+            [sparta-calendar.parser :as parser]))
 
 (defn index []
   (file-response "public/html/index.html" {:root "resources"}))
@@ -11,18 +12,8 @@
   {:status (or status 200)
    :body   (pr-str data)})
 
-(defn get-matches [] (generate-response (pr-str [{
-                                                  :team      "A tým"
-                                                  :event     "Příprava"
-                                                  :home-team "AC Sparta Praha"
-                                                  :away-team "FK Ústí nad Labem"
-                                                  :term      "13. 1. 2016 | 11:00"}
-                                                 {
-                                                  :team      "A tým"
-                                                  :event     "Test"
-                                                  :home-team "AC Sparta Praha"
-                                                  :away-team "bla bla"
-                                                  :term      "14. 1. 2016 | 15:00"}])))
+(defn get-matches []
+  (generate-response (pr-str (parser/load-matches))))
 
 (defroutes routes
            (GET "/" [] (index))
