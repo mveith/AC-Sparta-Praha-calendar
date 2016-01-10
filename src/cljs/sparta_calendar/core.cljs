@@ -26,19 +26,28 @@
   (reify
     om/IRender
     (render [_]
-      (dom/div nil
-               (dom/h2 nil "Zápasy ACS")))))
+      (dom/div #js {:className "title"}
+               (dom/h2 nil "AC SPARTA PRAHA - následující zápasy")))))
 
 (defn match-component [data owner]
   (reify
     om/IRender
     (render [_]
-      (dom/tr nil
-              (dom/td nil (get data :team))
-              (dom/td nil (get data :event))
-              (dom/td nil (get data :home-team))
-              (dom/td nil (get data :away-team))
-              (dom/td nil (get data :term))))))
+      (dom/div #js {:className "match"}
+               (dom/label nil
+                          (get data :term)
+                          " | "
+                          (get data :team)
+                          " | "
+                          (get data :event))
+               (dom/br nil)
+               (dom/label #js {:className "teams"}
+                          (get data :home-team)
+                          " - "
+                          (get data :away-team))
+               )
+
+      )))
 
 (defn matches-component [data owner]
   (reify
@@ -48,15 +57,8 @@
         {:on-complete #(om/transact! data :matches (fn [_] %))}))
     om/IRender
     (render [_]
-      (dom/table nil
-                 (dom/thead nil (dom/tr nil
-                                        (dom/th nil "Tým")
-                                        (dom/th nil "Soutěž")
-                                        (dom/th nil "Domácí")
-                                        (dom/th nil "Hosté")
-                                        (dom/th nil "Termín")))
-                 (apply dom/tbody nil
-                        (om/build-all match-component (reader/read-string (get data :matches))))))))
+      (apply dom/div #js {:className "matches"}
+             (om/build-all match-component (reader/read-string (get data :matches)))))))
 
 (defn main []
   (om/root
