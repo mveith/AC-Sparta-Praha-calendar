@@ -1,4 +1,4 @@
-(ns ^:figwheel-always sparta-calendar.core
+(ns sparta-calendar.core
   (:require [cljs.reader :as reader]
             [goog.events :as events]
             [om.core :as om :include-macros true]
@@ -12,6 +12,7 @@
 (println "Ready...")
 
 (defonce app-state (atom {:matches []}))
+
 
 (defn load-matches [{:keys [data on-complete]}]
   (let [xhr (XhrIo.)]
@@ -57,13 +58,14 @@
                  (apply dom/tbody nil
                         (om/build-all match-component (reader/read-string (get data :matches))))))))
 
-(defn root-component [data owner]
-  (reify
-    om/IRender
-    (render [_]
-      (dom/div nil
-               (om/build title-component data)
-               (om/build matches-component data)))))
-
-(om/root root-component app-state
-         {:target (.getElementById js/document "root")})
+(defn main []
+  (om/root
+    (fn [data owner]
+      (reify
+        om/IRender
+        (render [_]
+          (dom/div nil
+                   (om/build title-component data)
+                   (om/build matches-component data)))))
+    app-state
+    {:target (. js/document (getElementById "app"))}))
