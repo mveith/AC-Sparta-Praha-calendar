@@ -2,7 +2,7 @@
   :description "FIXME: write description"
   :url "https://mv1893.herokuapp.com/"
   :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
+            :url  "http://www.eclipse.org/legal/epl-v10.html"}
 
   :main sparta-calendar.core
 
@@ -31,18 +31,30 @@
   :clean-targets ^{:protect false} ["resources/public/js/out"
                                     "resources/public/js/main.js"]
 
-  :figwheel {:ring-handler sparta-calendar.core/handler}
+  :figwheel {:ring-handler sparta-calendar.core/handler
+             :server-port  3450}
 
   :uberjar-name "sparta-calendar.jar"
+  :uberjar {:source-paths ["src/clj"]
+            :hooks        [leiningen.cljsbuild]
+            :env          {:production true}
+            :omit-source  true
+            :aot          :all
+            :main         sparta-calendar.core
+            :cljsbuild    {:builds {:app
+                                    {:source-paths ["src/cljs"]
+                                     :compiler     {:optimizations :advanced
+                                                    :pretty-print  false}}}}}
+
 
   ;:profiles {:production {:env {:production true}}})
 
-  :cljsbuild {:builds [{:id "dev"
+  :cljsbuild {:builds [{:id           "dev"
                         :source-paths ["src/clj" "src/cljs"]
-                        :figwheel true
-                        :compiler {:output-to "resources/public/js/main.js"
-                                   :output-dir "resources/public/js/out"
-                                   :main sparta-calendar.core
-                                   :asset-path "js/out"
-                                   :optimizations :none
-                                   :source-map true}}]})
+                        :figwheel     true
+                        :compiler     {:output-to     "resources/public/js/main.js"
+                                       :output-dir    "resources/public/js/out"
+                                       :main          sparta-calendar.core
+                                       :asset-path    "js/out"
+                                       :optimizations :none
+                                       :source-map    true}}]})
