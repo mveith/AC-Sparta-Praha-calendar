@@ -54,3 +54,6 @@ target/repl-port
 target/figwheel_temp/dev/figwheel/connect.cljs
 target/stale/extract-native.dependencies
 target/
+.lein-env
+.lein-repl-history
+.nrepl-port
