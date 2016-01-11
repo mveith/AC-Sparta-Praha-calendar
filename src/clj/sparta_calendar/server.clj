@@ -17,6 +17,7 @@
 
 (defn generate-response [data & [status]]
   {:status (or status 200)
+   :headers {"Content-Type" "application/edn;charset=UTF-8"}
    :body   (pr-str data)})
 
 (defn get-matches []
