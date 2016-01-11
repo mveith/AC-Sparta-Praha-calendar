@@ -4,7 +4,8 @@
 
 (defn download-html [] (->
                          "http://www.sparta.cz/srv/www/cs/football/match/viewNextMatches.do"
-                         java.net.URL.
+                         (slurp :encoding "UTF-8")
+                         java.io.StringReader.
                          enlive/html-resource
                          ))
 
