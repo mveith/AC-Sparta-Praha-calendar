@@ -34,11 +34,12 @@
 (defn parse-date [date-time-string]
   (let [date (format/parse date-time-formatter date-time-string)]
     {
-     :day    (time/day date)
-     :month  (time/month date)
-     :year   (time/year date)
-     :hour   (time/hour date)
-     :minute (time/minute date)
+     :day         (time/day date)
+     :month       (time/month date)
+     :year        (time/year date)
+     :hour        (time/hour date)
+     :minute      (time/minute date)
+     :day-of-week (time/day-of-week date)
      }))
 
 (defn starts-with? [string pattern]
