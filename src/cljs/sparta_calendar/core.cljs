@@ -29,7 +29,7 @@
       (dom/div #js {:className "title"}
                (dom/h2 nil "AC SPARTA PRAHA - následující zápasy")))))
 
-(defn get-location-ico [match] (if (get match :is-home-match)
+(defn get-location-ico [match] (if (:is-home-match match)
                                  (dom/img #js {:src "css/home.png" :alt "home" :width 74 :height 74})
                                  (dom/img #js {:src "css/bus.png" :alt "away" :width 74 :height 74})))
 
@@ -37,13 +37,13 @@
   (dom/img #js {:src "css/sparta.png" :alt "ACS" :width 70 :height 80 :className "logo"}))
 
 (defn get-home-team [match]
-  (if (get match :is-home-match)
+  (if (:is-home-match match)
     (sparta-content)
-    (get match :home-team)))
+    (:home-team match)))
 
 (defn get-away-team [match]
-  (if (get match :is-home-match)
-    (get match :away-team)
+  (if (:is-home-match match)
+    (:away-team match)
     (sparta-content)))
 
 (defn match-component [data owner]
@@ -52,13 +52,13 @@
     (render [_]
       (dom/div #js {:className "match"}
                (dom/div #js {:className "date"}
-                        (dom/div #js {:className "day"} (utils/get-date-string (get data :date)))
-                        (dom/div #js {:className "time"} (utils/get-time-string (get data :date)))
+                        (dom/div #js {:className "day"} (utils/get-date-string (:date data)))
+                        (dom/div #js {:className "time"} (utils/get-time-string (:date data)))
                         (dom/div #js {:className "remaining"} "...")
                         )
                (dom/div #js {:className "main"}
-                        (dom/div #js {:className "team"} (get data :team))
-                        (dom/div #js {:className "event"} (get data :event))
+                        (dom/div #js {:className "team"} (:team data))
+                        (dom/div #js {:className "event"} (:event data))
                         (dom/div #js {:className "teams"}
                                  (dom/div #js {:className "teamsPart"} (get-home-team data))
                                  (dom/div #js {:className "teamsPart"} "vs.")
@@ -74,7 +74,7 @@
     om/IRender
     (render [_]
       (apply dom/div #js {:className "matches"}
-             (om/build-all match-component (reader/read-string (get data :matches)))))))
+             (om/build-all match-component (reader/read-string (:matches data)))))))
 
 (defn main []
   (om/root
