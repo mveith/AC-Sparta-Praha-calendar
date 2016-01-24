@@ -1,5 +1,6 @@
 (ns sparta-calendar.utils
-  (:require [goog.string :as gstring]))
+  (:require [goog.string :as gstring]
+            [goog.string.format]))
 
 (defn get-day-of-week-shortcut [day-of-week]
   (case day-of-week
