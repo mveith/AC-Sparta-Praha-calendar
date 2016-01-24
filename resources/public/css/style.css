@@ -35,7 +35,8 @@ body {
 .date {
     flex: 1 20%;
     border-radius: 7px 0 0 7px;
-    background-color: rgba(45, 62, 88, 1);
+    background-color: rgba(119, 21, 33, 1);
+    font-weight: bold;
     display: flex;
     flex-direction: column;
     color: white;
@@ -64,7 +65,7 @@ body {
     display: flex;
     border-style: solid;
     border-width: 1px 0px 1px 0px;
-    border-color: rgba(29, 161, 163, 1);
+    border-color: rgba(192, 33, 54, 1);
     flex-direction: column;
     justify-content: center;
     text-align: center;
@@ -88,7 +89,6 @@ body {
 }
 
 .team {
-    flex: 1 30%;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -107,7 +107,6 @@ body {
 }
 
 .event {
-    margin: 10px;
     text-align: center;
     font-weight: bold;
 }
@@ -119,7 +118,7 @@ body {
     text-align: center;
     border-style: solid;
     border-width: 0px 0px 0px 1px;
-    border-color: rgba(29, 161, 163, 1);
+    border-color: rgba(192, 33, 54, 1);
     padding: 13px;
 }
 
