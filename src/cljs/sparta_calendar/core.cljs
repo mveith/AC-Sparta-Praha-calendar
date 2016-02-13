@@ -4,6 +4,7 @@
             [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
             [sparta-calendar.utils :as utils]
+            [sparta-calendar.filter :as filter]
             [cljs-time.local :as local-time])
   (:import [goog.net XhrIo]
            goog.net.EventType
@@ -13,8 +14,9 @@
 
 (println "Ready...")
 
-(defonce app-state (atom {:matches []
-                          :now     (local-time/local-now)}))
+(defonce app-state (atom {:matches     []
+                          :all-matches []
+                          :now         (local-time/local-now)}))
 
 (defn load-matches [{:keys [data on-complete]}]
   (let [xhr (XhrIo.)]
@@ -72,7 +74,8 @@
     om/IWillMount
     (will-mount [_]
       (load-matches
-        {:on-complete #(om/transact! data :matches (fn [_] %))})
+        {:on-complete #((om/transact! data :matches (fn [_] %))
+                        (om/transact! data :all-matches (fn [_] %)))})
 
       (om/set-state! owner :interval
                      (js/setInterval
@@ -96,6 +99,7 @@
         (render [_]
           (dom/div nil
                    (om/build title-component data)
+                   (om/build filter/filters-component data)
                    (om/build matches-component data)))))
     app-state
     {:target (. js/document (getElementById "app"))}))

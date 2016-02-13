@@ -20,7 +20,8 @@ body {
     text-align: center;
 }
 
-.matches {}
+.matches {
+}
 
 .match {
     display: flex;
@@ -129,4 +130,14 @@ h1 {
 .logo {
     display: block;
     margin: 0 auto;
+}
+
+.teamFilters {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.teamFilter {
+    margin-right: 10px;
+    width: 150px;
 }
