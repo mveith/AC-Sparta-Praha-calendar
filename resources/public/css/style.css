@@ -26,7 +26,6 @@ body {
 .match {
     display: flex;
     flex-direction: row;
-    width: 800px;
     height: 150px;
     background-color: white;
     border-radius: 7px;
