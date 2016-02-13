@@ -140,4 +140,12 @@ h1 {
 .teamFilter {
     margin-right: 10px;
     width: 150px;
+    font-weight: bold;
+    height: 2.5rem;
+    text-align: center;
+    vertical-align: middle;
+    background-color: rgba(119, 21, 33, 1);
+    border: 1px rgba(192, 33, 54, 1) solid;
+    color: white;
+    cursor: pointer;
 }
