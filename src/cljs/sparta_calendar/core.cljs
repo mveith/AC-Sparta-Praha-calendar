@@ -89,7 +89,7 @@
     om/IRender
     (render [_]
       (apply dom/div #js {:className "matches"}
-             (om/build-all match-component (reader/read-string (:matches data)))))))
+             (om/build-all match-component (:matches data))))))
 
 (defn main []
   (om/root

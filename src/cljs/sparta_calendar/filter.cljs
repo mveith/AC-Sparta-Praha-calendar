@@ -1,6 +1,5 @@
 (ns sparta-calendar.filter
-  (:require [cljs.reader :as reader]
-            [om.core :as om :include-macros true]
+  (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true])
   (:import [goog.net XhrIo]
            goog.net.EventType
@@ -13,14 +12,14 @@
   (filter (fn [m] (= (:team m) team-name)) matches))
 
 (defn update-visible-matches [state visible-matches]
-  (om/update! state :matches (pr-str visible-matches)))
+  (om/update! state :matches visible-matches))
 
 (defn team-filter-component [data owner]
   (reify
     om/IRender
     (render [_]
       (let [state (:state data)
-            matches (reader/read-string (:all-matches state))
+            matches (:all-matches state)
             team-name (:team data)]
         (dom/button #js {
                          :className "teamFilter"
@@ -31,7 +30,7 @@
   (reify
     om/IRender
     (render [_]
-      (let [teams (get-teams (reader/read-string (:all-matches data)))]
+      (let [teams (get-teams (:all-matches data))]
         (apply dom/div #js {:className "teamFilters"}
                (om/build-all team-filter-component (map (fn [t] {:team t :state data}) teams)))))))
 

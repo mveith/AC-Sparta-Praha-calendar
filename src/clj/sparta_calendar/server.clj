@@ -13,21 +13,21 @@
   (:gen-class))
 
 (deftemplate page (io/resource "index.html") []
-  [:body] (if is-dev? inject-devmode-html identity))
+             [:body] (if is-dev? inject-devmode-html identity))
 
 (defn generate-response [data & [status]]
-  {:status (or status 200)
+  {:status  (or status 200)
    :headers {"Content-Type" "application/edn;charset=UTF-8"}
-   :body   (pr-str data)})
+   :body    (pr-str data)})
 
 (defn get-matches []
-  (generate-response (pr-str (parser/load-matches))))
+  (generate-response (parser/load-matches)))
 
 (defroutes routes
-  (resources "/")
-  (resources "/react" {:root "react"})
-  (GET "/matches" [] (get-matches))
-  (GET "/*" req (page)))
+           (resources "/")
+           (resources "/react" {:root "react"})
+           (GET "/matches" [] (get-matches))
+           (GET "/*" req (page)))
 
 (def http-handler
   (if is-dev?
