@@ -77,7 +77,7 @@
       (om/set-state! owner :interval
                      (js/setInterval
                        #(om/update! data :now (local-time/local-now))
-                       1000)))
+                       (* 60 1000))))
 
     om/IWillUnmount
     (will-unmount [_]
