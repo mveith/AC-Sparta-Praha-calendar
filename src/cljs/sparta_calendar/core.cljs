@@ -3,7 +3,8 @@
             [goog.events :as events]
             [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
-            [sparta-calendar.utils :as utils])
+            [sparta-calendar.utils :as utils]
+            [cljs-time.local :as local-time])
   (:import [goog.net XhrIo]
            goog.net.EventType
            [goog.events EventType]))
@@ -12,7 +13,8 @@
 
 (println "Ready...")
 
-(defonce app-state (atom {:matches []}))
+(defonce app-state (atom {:matches []
+                          :now     (local-time/local-now)}))
 
 (defn load-matches [{:keys [data on-complete]}]
   (let [xhr (XhrIo.)]
@@ -54,7 +56,7 @@
                (dom/div #js {:className "date"}
                         (dom/div #js {:className "day"} (utils/get-date-string (:date data)))
                         (dom/div #js {:className "time"} (utils/get-time-string (:date data)))
-                        (dom/div #js {:className "remaining"} "...")
+                        (dom/div #js {:className "remaining"} (utils/remaining-time (:date data) (local-time/local-now)))
                         )
                (dom/div #js {:className "main"}
                         (dom/div #js {:className "team"} (:team data))
@@ -70,7 +72,17 @@
     om/IWillMount
     (will-mount [_]
       (load-matches
-        {:on-complete #(om/transact! data :matches (fn [_] %))}))
+        {:on-complete #(om/transact! data :matches (fn [_] %))})
+
+      (om/set-state! owner :interval
+                     (js/setInterval
+                       #(om/update! data :now (local-time/local-now))
+                       1000)))
+
+    om/IWillUnmount
+    (will-unmount [_]
+      (js/clearInterval (om/get-state owner :interval)))
+
     om/IRender
     (render [_]
       (apply dom/div #js {:className "matches"}

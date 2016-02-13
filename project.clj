@@ -16,7 +16,8 @@
                  [enlive "1.1.6"]
                  [org.omcljs/om "0.8.8"]
                  [environ "1.0.0"]
-                 [clj-time "0.11.0"]]
+                 [clj-time "0.11.0"]
+                 [com.andrewmcveigh/cljs-time "0.4.0"]]
 
   :plugins [[lein-cljsbuild "1.0.5"]
             [lein-environ "1.0.0"]]
