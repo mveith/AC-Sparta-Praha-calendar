@@ -6,7 +6,7 @@
            [goog.events EventType]))
 
 (defn get-teams [matches]
-  (distinct (map (fn [m] (:team m)) matches)))
+  (sort (distinct (map (fn [m] (:team m)) matches))))
 
 (defn filter-matches-by-team-name [team-name matches]
   (filter (fn [m] (= (:team m) team-name)) matches))
