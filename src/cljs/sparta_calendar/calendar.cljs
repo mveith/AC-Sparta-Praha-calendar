@@ -40,7 +40,7 @@
                   "CLASS:PUBLIC" br
                   "END:VEVENT" br
                   "END:VCALENDAR")]
-    (str "data:text/plain;charset=utf-8," content)))
+    (str "data:text/calendar;charset=utf-8," content)))
 
 (defn download [match] (let [a (js/window.document.createElement "a")
                              href (get-match-calendar-file-content match)]
