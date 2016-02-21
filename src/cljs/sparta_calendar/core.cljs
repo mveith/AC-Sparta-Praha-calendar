@@ -5,6 +5,7 @@
             [om.dom :as dom :include-macros true]
             [sparta-calendar.utils :as utils]
             [sparta-calendar.filter :as filter]
+            [sparta-calendar.calendar :as calendar]
             [cljs-time.local :as local-time])
   (:import [goog.net XhrIo]
            goog.net.EventType
@@ -55,7 +56,7 @@
     om/IRender
     (render [_]
       (dom/div #js {:className "match"}
-               (dom/div #js {:className "date"}
+               (dom/div #js {:className "date" :onClick #(calendar/download data)}
                         (dom/div #js {:className "day"} (utils/get-date-string (:date data)))
                         (dom/div #js {:className "time"} (utils/get-time-string (:date data)))
                         (dom/div #js {:className "remaining"} (utils/remaining-time (:date data) (local-time/local-now)))
