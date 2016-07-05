@@ -72,6 +72,8 @@
                        :main sparta-calendar.server
                        :cljsbuild {:builds {:app
                                             {:source-paths ["env/prod/cljs"]
-                                             :compiler
-                                             {:optimizations :advanced
-                                              :pretty-print false}}}}}})
+                                             :compiler {:output-to     "resources/public/js/app.js"
+                                                        :output-dir    "resources/public/js"
+                                                        :source-map    "resources/public/js/app.js.map"
+                                                        :optimizations :whitespace
+                                                        :pretty-print  false}}}}}})
