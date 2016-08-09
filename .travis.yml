@@ -1,0 +1,8 @@
+language: clojure
+
+script: lein uberjar
+
+after_success:
+ - docker build -t mveith/sparta-calendar .
+ - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" -e="$DOCKER_EMAIL"
+ - docker push mveith/sparta-calendar
