@@ -1,5 +1,8 @@
 language: clojure
 
+services:
+  - docker
+
 script: lein uberjar
 
 after_success:
