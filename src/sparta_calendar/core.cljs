@@ -1,6 +1,5 @@
 (ns sparta-calendar.core
-  (:require [cljs.reader :as reader]
-            [goog.events :as events]
+  (:require [goog.events :as events]
             [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
             [sparta-calendar.utils :as utils]
@@ -15,6 +14,8 @@
 
 (println "Ready...")
 
+(def matches-url "https://myphhk68w9.execute-api.us-east-2.amazonaws.com/prod/matches")
+
 (defonce app-state (atom {:matches     []
                           :all-matches []
                           :now         (local-time/local-now)}))
@@ -22,10 +23,8 @@
 (defn load-matches [{:keys [data on-complete]}]
   (let [xhr (XhrIo.)]
     (events/listen xhr goog.net.EventType.COMPLETE
-                   (fn [e]
-                     (on-complete (reader/read-string (.getResponseText xhr)))))
-    (. xhr
-       (send "matches" "GET" (when data (pr-str data))))))
+                   (fn [e] (on-complete (utils/parse-response xhr))))
+    (. xhr (send matches-url "GET" (when data (pr-str data))))))
 
 (defn title-component [data owner]
   (reify
@@ -76,7 +75,7 @@
     (will-mount [_]
       (load-matches
         {:on-complete #((om/transact! data :matches (fn [_] %))
-                        (om/transact! data :all-matches (fn [_] %)))})
+                         (om/transact! data :all-matches (fn [_] %)))})
 
       (om/set-state! owner :interval
                      (js/setInterval
@@ -92,15 +91,14 @@
       (apply dom/div #js {:className "matches"}
              (om/build-all match-component (:matches data))))))
 
-(defn main []
-  (om/root
-    (fn [data owner]
-      (reify
-        om/IRender
-        (render [_]
-          (dom/div nil
-                   (om/build title-component data)
-                   (om/build filter/filters-component data)
-                   (om/build matches-component data)))))
-    app-state
-    {:target (. js/document (getElementById "app"))}))
+(om/root
+  (fn [data owner]
+    (reify
+      om/IRender
+      (render [_]
+        (dom/div nil
+                 (om/build title-component data)
+                 (om/build filter/filters-component data)
+                 (om/build matches-component data)))))
+  app-state
+  {:target (. js/document (getElementById "app"))})

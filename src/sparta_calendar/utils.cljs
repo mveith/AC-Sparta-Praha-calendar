@@ -2,7 +2,13 @@
   (:require [goog.string :as gstring]
             [goog.string.format]
             [cljs-time.core :as time]
-            [cljs-time.local :as local-time]))
+            [cljs-time.local :as local-time]
+            [cljs.reader :as reader]
+            [cognitect.transit :as t]))
+
+(defn parse-response [xhr]
+  (def r (t/reader :json))
+  (reader/read-string (get (t/read r (.getResponseText xhr)) "body")))
 
 (defn get-day-of-week-shortcut [day-of-week]
   (case day-of-week
