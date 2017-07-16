@@ -1,11 +1,12 @@
 language: clojure
 
-services:
-  - docker
+deploy:
+  provider: s3
+  access_key_id: $AWS_ACCESS_KEY_ID
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
+  bucket: $AWS_S3_BUCKET_NAME
+  skip_cleanup: true
+  region: $AWS_S3_BUCKET_REGION
+  local_dir: resources/public
 
-script: lein uberjar
-
-after_success:
- - docker build -t mveith/sparta-calendar .
- - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" -e="$DOCKER_EMAIL"
- - docker push mveith/sparta-calendar
+script: lein do clean, cljsbuild once min
