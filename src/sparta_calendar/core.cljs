@@ -5,7 +5,8 @@
             [sparta-calendar.utils :as utils]
             [sparta-calendar.filter :as filter]
             [sparta-calendar.calendar :as calendar]
-            [cljs-time.local :as local-time])
+            [cljs-time.local :as local-time]
+            [cljs.reader :as reader])
   (:import [goog.net XhrIo]
            goog.net.EventType
            [goog.events EventType]))
@@ -14,17 +15,11 @@
 
 (println "Ready...")
 
-(def matches-url "https://myphhk68w9.execute-api.us-east-2.amazonaws.com/prod/matches")
+(def matches
+  (reader/read-string js/matchesData))
 
-(defonce app-state (atom {:matches     []
-                          :all-matches []
-                          :now         (local-time/local-now)}))
-
-(defn load-matches [{:keys [data on-complete]}]
-  (let [xhr (XhrIo.)]
-    (events/listen xhr goog.net.EventType.COMPLETE
-                   (fn [e] (on-complete (utils/parse-response xhr))))
-    (. xhr (send matches-url "GET" (when data (pr-str data))))))
+(defonce app-state (atom {:matches     matches
+                          :all-matches matches}))
 
 (defn title-component [data owner]
   (reify
@@ -71,21 +66,6 @@
 
 (defn matches-component [data owner]
   (reify
-    om/IWillMount
-    (will-mount [_]
-      (load-matches
-        {:on-complete #((om/transact! data :matches (fn [_] %))
-                         (om/transact! data :all-matches (fn [_] %)))})
-
-      (om/set-state! owner :interval
-                     (js/setInterval
-                       #(om/update! data :now (local-time/local-now))
-                       (* 60 1000))))
-
-    om/IWillUnmount
-    (will-unmount [_]
-      (js/clearInterval (om/get-state owner :interval)))
-
     om/IRender
     (render [_]
       (apply dom/div #js {:className "matches"}
