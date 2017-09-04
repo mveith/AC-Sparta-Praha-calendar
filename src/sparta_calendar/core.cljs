@@ -45,6 +45,9 @@
     (:away-team match)
     (sparta-content)))
 
+(defn is-future-match [match]
+  (> (utils/get-match-date (:date match)) (local-time/local-now)))
+
 (defn match-component [data owner]
   (reify
     om/IRender
@@ -69,7 +72,7 @@
     om/IRender
     (render [_]
       (apply dom/div #js {:className "matches"}
-             (om/build-all match-component (:matches data))))))
+             (om/build-all match-component (filter is-future-match (:matches data)))))))
 
 (om/root
   (fn [data owner]
